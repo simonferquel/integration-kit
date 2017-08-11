@@ -62,8 +62,8 @@ func (v *APIVersion) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// ParseApiVersion parses a version from a non-quoted string
-func ParseApiVersion(s string) (APIVersion, error) {
+// ParseAPIVersion parses a version from a non-quoted string
+func ParseAPIVersion(s string) (APIVersion, error) {
 	var v APIVersion
 	err := v.UnmarshalJSON([]byte(`"` + s + `"`))
 	return v, err
@@ -84,9 +84,9 @@ type Node struct {
 
 // Cluster describes a cluster of Nodes
 type Cluster struct {
-	Nodes           []Node `json:"nodes"`
-	HasSwarm        bool   `json:"hasSwarm"`
-	HasSwarmClassic bool   `json:"hasSwarmClassic"`
+	Nodes           []*Node `json:"nodes"`
+	HasSwarm        bool    `json:"hasSwarm"`
+	HasSwarmClassic bool    `json:"hasSwarmClassic"`
 }
 
 // NodePredicate is a predicate used to filter nodes
@@ -119,6 +119,20 @@ func SupportsPlatform(platform Platform) NodePredicate {
 			}
 		}
 		return false
+	}
+}
+
+// IsOS returns true if the node machine is running the specified OS
+func IsOS(os string) NodePredicate {
+	return func(n *Node) bool {
+		return n.HostPlatform.OS == os
+	}
+}
+
+// IsPlatform returns true if the node machine is running the specified OS/Arch
+func IsPlatform(p Platform) NodePredicate {
+	return func(n *Node) bool {
+		return n.HostPlatform == p
 	}
 }
 
@@ -176,10 +190,10 @@ func Not(predicate NodePredicate) NodePredicate {
 }
 
 // FindNodes returns nodes matching the supplied predicate
-func (c *Cluster) FindNodes(predicate NodePredicate) []Node {
-	var result []Node
+func (c *Cluster) FindNodes(predicate NodePredicate) []*Node {
+	var result []*Node
 	for _, n := range c.Nodes {
-		if predicate(&n) {
+		if predicate(n) {
 			result = append(result, n)
 		}
 	}
@@ -187,7 +201,7 @@ func (c *Cluster) FindNodes(predicate NodePredicate) []Node {
 }
 
 // ClusterFromNodes inialize a cluster description from a node collection
-func ClusterFromNodes(nodes []Node) Cluster {
+func ClusterFromNodes(nodes []*Node) *Cluster {
 	c := Cluster{Nodes: nodes}
 	for _, n := range nodes {
 		if n.IsSwarmClassicController {
@@ -197,5 +211,5 @@ func ClusterFromNodes(nodes []Node) Cluster {
 			c.HasSwarm = true
 		}
 	}
-	return c
+	return &c
 }

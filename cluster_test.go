@@ -28,8 +28,8 @@ func TestNodePredicates(t *testing.T) {
 	cluster := Cluster{
 		HasSwarm:        true,
 		HasSwarmClassic: true,
-		Nodes: []Node{
-			Node{
+		Nodes: []*Node{
+			&Node{
 				Name:                     "linux-amd64-manager",
 				Experimental:             false,
 				HostPlatform:             Platform{OS: "linux", Arch: "amd64"},
@@ -39,7 +39,7 @@ func TestNodePredicates(t *testing.T) {
 				MaxAPIVersion:            APIVersion{5, 0},
 				SupportedPlatforms:       nil,
 			},
-			Node{
+			&Node{
 				Name:                     "win-amd64-manager",
 				Experimental:             false,
 				HostPlatform:             Platform{OS: "windows", Arch: "amd64"},
@@ -49,7 +49,7 @@ func TestNodePredicates(t *testing.T) {
 				MaxAPIVersion:            APIVersion{5, 0},
 				SupportedPlatforms:       nil,
 			},
-			Node{
+			&Node{
 				Name:                     "win-amd64-lcow",
 				Experimental:             false,
 				HostPlatform:             Platform{OS: "windows", Arch: "amd64"},
@@ -59,7 +59,7 @@ func TestNodePredicates(t *testing.T) {
 				MaxAPIVersion:            APIVersion{5, 0},
 				SupportedPlatforms:       []Platform{Platform{OS: "lcow", Arch: "amd64"}},
 			},
-			Node{
+			&Node{
 				Name:                     "linux-arm",
 				Experimental:             false,
 				HostPlatform:             Platform{OS: "linux", Arch: "arm"},
@@ -69,7 +69,7 @@ func TestNodePredicates(t *testing.T) {
 				MaxAPIVersion:            APIVersion{5, 0},
 				SupportedPlatforms:       nil,
 			},
-			Node{
+			&Node{
 				Name:                     "linux-newversion",
 				Experimental:             false,
 				HostPlatform:             Platform{OS: "linux", Arch: "amd64"},
@@ -79,7 +79,7 @@ func TestNodePredicates(t *testing.T) {
 				MaxAPIVersion:            APIVersion{7, 0},
 				SupportedPlatforms:       nil,
 			},
-			Node{
+			&Node{
 				Name:                     "linux-experimental",
 				Experimental:             true,
 				HostPlatform:             Platform{OS: "linux", Arch: "amd64"},

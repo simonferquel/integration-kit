@@ -65,11 +65,11 @@ func DiscoverNode(ctx context.Context, dc *client.Client) (*Node, error) {
 		}
 		n.SupportedPlatforms = append(n.SupportedPlatforms, findSwarmClassicSupportedPlatforms(&info)...)
 	}
-	n.MinAPIVersion, err = ParseApiVersion(v.MinAPIVersion)
+	n.MinAPIVersion, err = ParseAPIVersion(v.MinAPIVersion)
 	if err != nil {
 		return nil, err
 	}
-	n.MaxAPIVersion, err = ParseApiVersion(v.APIVersion)
+	n.MaxAPIVersion, err = ParseAPIVersion(v.APIVersion)
 
 	if err != nil {
 		return nil, err
