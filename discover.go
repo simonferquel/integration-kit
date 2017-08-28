@@ -27,7 +27,7 @@ func findSwarmClassicSupportedPlatforms(info *types.Info) []Platform {
 			if indexOfOsType := strings.Index(t[1], "ostype="); indexOfOsType != -1 {
 				res := t[1][indexOfOsType+7:]
 				res = res[:strings.Index(res, ",")]
-				result = append(result, Platform{OS: res})
+				result = append(result, Platform{OS: NormalizeOS(res)})
 			}
 		}
 	}
@@ -47,21 +47,21 @@ func DiscoverNode(ctx context.Context, dc *client.Client) (*Node, error) {
 	}
 	n := Node{
 		Experimental:             info.ExperimentalBuild,
-		HostPlatform:             Platform{Arch: info.Architecture, OS: info.OSType},
+		HostPlatform:             Platform{Arch: NormalizeArch(info.Architecture), OS: NormalizeOS(info.OSType)},
 		IsSwarmClassicController: isSwarmClassic(&info),
 		IsSwarmManager:           info.Swarm.ControlAvailable,
 		Name:                     info.Name,
-		SupportedPlatforms:       []Platform{{Arch: info.Architecture, OS: info.OSType}},
+		SupportedPlatforms:       []Platform{{Arch: NormalizeArch(info.Architecture), OS: NormalizeOS(info.OSType)}},
 	}
-	if n.HostPlatform.OS == "windows" {
+	if n.HostPlatform.OS == OSWindows {
 		if strings.Contains(info.Driver, "lcow") {
-			n.SupportedPlatforms = append(n.SupportedPlatforms, Platform{Arch: info.Architecture, OS: "lcow"})
+			n.SupportedPlatforms = append(n.SupportedPlatforms, Platform{Arch: NormalizeArch(info.Architecture), OS: OSLinux})
 		}
 	}
 	if n.IsSwarmClassicController {
 		if n.HostPlatform.OS == "" {
-			n.HostPlatform.OS = info.OperatingSystem
-			n.SupportedPlatforms[0].OS = info.OperatingSystem
+			n.HostPlatform.OS = NormalizeOS(info.OperatingSystem)
+			n.SupportedPlatforms[0].OS = NormalizeOS(info.OperatingSystem)
 		}
 		n.SupportedPlatforms = append(n.SupportedPlatforms, findSwarmClassicSupportedPlatforms(&info)...)
 	}
