@@ -7,12 +7,6 @@ import (
 	"strings"
 )
 
-// Platform describes an OS and CPU architecture
-type Platform struct {
-	OS   string `json:"os"`
-	Arch string `json:"arch"`
-}
-
 // APIVersion represents a docker api version
 type APIVersion struct {
 	Major, Minor int
@@ -93,7 +87,7 @@ type Cluster struct {
 type NodePredicate func(*Node) bool
 
 // SupportsOS returns a predicate for nodes supporting the given OS (with any arch)
-func SupportsOS(os string) NodePredicate {
+func SupportsOS(os OS) NodePredicate {
 	return func(n *Node) bool {
 		if n.HostPlatform.OS == os {
 			return true
@@ -123,7 +117,7 @@ func SupportsPlatform(platform Platform) NodePredicate {
 }
 
 // IsOS returns true if the node machine is running the specified OS
-func IsOS(os string) NodePredicate {
+func IsOS(os OS) NodePredicate {
 	return func(n *Node) bool {
 		return n.HostPlatform.OS == os
 	}
