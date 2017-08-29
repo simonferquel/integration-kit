@@ -43,7 +43,10 @@ func NormalizeArch(arch string) Arch {
 	case "armhf", "armel":
 		res = ArchARM
 	}
-	return res
+	if res != "" {
+		return res
+	}
+	return Arch(arch)
 }
 
 // NormalizeOS normalizes the operating system.
