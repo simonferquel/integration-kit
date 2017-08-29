@@ -4,14 +4,16 @@ import (
 	"strings"
 )
 
-// Platform describes an OS and CPU architecture
+// Platform describes an OS and CPU architecture.
 type Platform struct {
 	OS   OS   `json:"os"`
 	Arch Arch `json:"arch"`
 }
 
+// Arch type is used to represent CPU architecture.
 type Arch string
 
+// List of supported CPU architectures.
 const (
 	ArchAMD64   Arch = "amd64"
 	ArchARM          = "arm"
@@ -20,8 +22,10 @@ const (
 	ArchS390X        = "s390x"
 )
 
+// OS type is used to represent operating system.
 type OS string
 
+// List of supported OSes.
 const (
 	OSLinux   OS = "linux"
 	OSWindows    = "windows"
