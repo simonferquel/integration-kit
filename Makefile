@@ -1,3 +1,5 @@
+DEV_IMAGE?=integration-kit-dev
+
 setup:
 	go get -u github.com/golang/lint/golint
 
@@ -12,4 +14,9 @@ vet:
 
 test-all: vet lint test
 
-.PHONY: setup lint test vet test-all
+clean-dev-image:
+	docker image rm ${DEV_IMAGE}
+
+clean: clean-dev-image
+
+.PHONY: setup lint test vet test-all clean-dev-image clean
